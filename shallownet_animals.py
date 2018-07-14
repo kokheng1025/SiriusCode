@@ -13,13 +13,14 @@ import argparse
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-d", "--dataset", required=True,
+ap.add_argument("-d", "--dataset", required=False,
     help="path to input dataset")
 args = vars(ap.parse_args())
 
 # grab the list of images that we'll be describing
 print("[INFO] loading images...")
-imagePaths = list(paths.list_images(args["dataset"]))
+#imagePaths = list(paths.list_images(args["dataset"]))
+imagePaths = list(paths.list_images(".\\datasets\\animals1\\"))
 
 # initialize the image preprocessors
 sp = SimplePreprocessor(32, 32)
@@ -43,8 +44,8 @@ testY = LabelBinarizer().fit_transform(testY)
 # initialize the optimizer and model
 print("[INFO] compiling model...")
 opt = SGD(lr=0.005)
-model = ShallowNet.build(width=32, height=32, depth=3, classes=3)
-model.compile(loss="categorical_crossentropy", optimizer=opt, 
+model = ShallowNet.build(width=32, height=32, depth=3, classes=2)
+model.compile(loss="sparse_categorical_crossentropy", optimizer=opt, 
     metrics=["accuracy"])
 
 # train the network
